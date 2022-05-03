@@ -1,4 +1,7 @@
 import Piece from './piece';
+import Square from '../square';
+import {addDiagonalMoves, addLateralMoves} from "./movesHelper";
+import player from "../player";
 
 export default class Queen extends Piece {
     constructor(player) {
@@ -6,6 +9,11 @@ export default class Queen extends Piece {
     }
 
     getAvailableMoves(board) {
-        return new Array(0);
+        let location = board.findPiece(this);
+        let availableMoves = addLateralMoves(location, board);
+        let diagonalMoves = addDiagonalMoves(location, board);
+        availableMoves.push(...diagonalMoves);
+        return availableMoves;
+
     }
 }
