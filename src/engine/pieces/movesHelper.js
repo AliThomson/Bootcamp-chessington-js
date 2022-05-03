@@ -60,3 +60,14 @@ exports.addDiagonalMoves = function (location, board) {
     //console.log(availableMoves)
     return availableMoves;
 }
+exports.removeOffBoardMoves = function (availableMoves) {
+    for (let i = 0; i <= availableMoves.length - 1; i++) {
+        if (availableMoves[i].row < 0 || availableMoves[i].row > 7) {
+            availableMoves.splice(i, 1);
+        }
+        if (availableMoves[i].col < 0 || availableMoves[i].col > 7) {
+            availableMoves.splice(i, 1);
+        }
+        return availableMoves;
+    }
+}

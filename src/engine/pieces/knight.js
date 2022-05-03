@@ -1,5 +1,6 @@
 import Piece from './piece';
 import Square from '../square';
+import {removeOffBoardMoves} from "./movesHelper";
 
 export default class Knight extends Piece {
     constructor(player) {
@@ -41,15 +42,7 @@ export default class Knight extends Piece {
         availableMoves.push(Square.at(rowStartPoint, colStartPoint+2));
 
         // we need to remove any squares that fall outside the board (<0 or >7)
-
-        for (let i=0; i<=availableMoves.length-1; i++) {
-            if (availableMoves[i].row < 0 || availableMoves[i].row > 7) {
-                availableMoves.splice(i,1);
-            }
-            if (availableMoves[i].col < 0 || availableMoves[i].col > 7) {
-                availableMoves.splice(i,1);
-            }
-        }
+        removeOffBoardMoves(availableMoves);
 
         return availableMoves;
     }
