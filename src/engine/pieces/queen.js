@@ -8,8 +8,8 @@ export default class Queen extends Piece {
 
     getAvailableMoves(board) {
         const location = board.findPiece(this);
-        let availableMoves = addLateralMoves(location, board);
-        let diagonalMoves = addDiagonalMoves(location, board);
+        let availableMoves = addLateralMoves(location);
+        let diagonalMoves = addDiagonalMoves(location);
         availableMoves.push(...diagonalMoves);
         return availableMoves;
 

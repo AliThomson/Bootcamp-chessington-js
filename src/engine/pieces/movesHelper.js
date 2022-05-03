@@ -1,6 +1,7 @@
 import Square from "../square";
+import Player from "../player";
 
-exports.addLateralMoves = function (location, board) {
+exports.addLateralMoves = function (location) {
     let availableMoves = [];
     let endPoint = 7;
     let colStartPoint = location.col;
@@ -23,7 +24,7 @@ exports.addLateralMoves = function (location, board) {
     }
     return availableMoves;
 }
-exports.addDiagonalMoves = function (location, board) {
+exports.addDiagonalMoves = function (location) {
     let availableMoves = [];
     let endPoint = 7;
     let colStartPoint = location.col;
@@ -70,4 +71,36 @@ exports.removeOffBoardMoves = function (availableMoves) {
         }
         return availableMoves;
     }
+}
+exports.removeBlockedMoves = function (allAvailableMoves, board, location) {
+    // if a blocking piece is found remove all moves after it. If the blocking piece is friendly remove the square with the blocker on it too
+    let availableMoves = [];
+    for (let i = 0; i <= allAvailableMoves.length - 1; i++) {
+        let blockingPiece = board.getPiece(allAvailableMoves[i])
+
+        if (blockingPiece) {
+            const blockLocation = Square.at(allAvailableMoves[i].row, allAvailableMoves[i].col);
+            if (location.row > allAvailableMoves[i].row) {
+                //add all moves where row > the row of the blocker
+                availableMoves = allAvailableMoves.filter(square => square.row > blockLocation.row);
+            } else {
+                // add all moves where row < blocker row
+                availableMoves = allAvailableMoves.filter(square => square.row < blockLocation.row);
+            }
+            if (location.col > allAvailableMoves[i].col) {
+                //add all moves where column > the column of the blocker
+                availableMoves = allAvailableMoves.filter(square => square.col > blockLocation.col);
+            } else {
+                // add all moves where column < blocker column
+                availableMoves = allAvailableMoves.filter(square => square.col < blockLocation.col);
+            }
+            if (board.currentPlayer.description === blockingPiece.player.description) {
+                availableMoves.splice(i, 1);
+            }
+        }
+    }
+    if (availableMoves.length === 0) {
+        availableMoves = allAvailableMoves;
+    }
+    return availableMoves
 }

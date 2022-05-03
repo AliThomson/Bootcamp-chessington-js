@@ -1,6 +1,7 @@
 import Piece from './piece';
 import Square from '../square';
-import {addLateralMoves} from "./movesHelper";
+import {addLateralMoves, removeBlockedMoves} from "./movesHelper";
+import Player from "../player";
 
 
 export default class Rook extends Piece {
@@ -10,7 +11,9 @@ export default class Rook extends Piece {
 
     getAvailableMoves(board) {
         const location = board.findPiece(this);
-        const availableMoves = addLateralMoves(location, board);
+        let allAvailableMoves = addLateralMoves(location);
+        let availableMoves = removeBlockedMoves(allAvailableMoves, board, location);
+
         return availableMoves;
     }
 }
