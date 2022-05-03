@@ -41,13 +41,13 @@ export default class Knight extends Piece {
         availableMoves.push(Square.at(rowStartPoint, colStartPoint+2));
 
         // we need to remove any squares that fall outside the board (<0 or >7)
-        let offBoardSquares = [];
+
         for (let i=0; i<=availableMoves.length-1; i++) {
             if (availableMoves[i].row < 0 || availableMoves[i].row > 7) {
-                offBoardSquares = availableMoves.splice(i,1);
+                availableMoves.splice(i,1);
             }
             if (availableMoves[i].col < 0 || availableMoves[i].col > 7) {
-                offBoardSquares = availableMoves.splice(i,1);
+                availableMoves.splice(i,1);
             }
         }
 
