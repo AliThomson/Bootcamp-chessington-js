@@ -16,14 +16,9 @@ export default class King extends Piece {
         for (let i=0; i<=2; i++) {
             for (let j=0; j<=2; j++) {
 
-                if (i===1 && j===1) {
-                    //skip this square as this is the start point
-
-                } else {
-
-                    availableMoves.push(Square.at(rowStartPoint + i, colStartPoint + j));
+                if (i!==1 || j!==1) {
+                   availableMoves.push(Square.at(rowStartPoint + i, colStartPoint + j));
                 }
-
             }
         }
         removeOffBoardMoves(availableMoves);
