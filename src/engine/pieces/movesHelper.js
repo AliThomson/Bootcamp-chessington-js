@@ -59,16 +59,14 @@ exports.addDiagonalMoves = function (location) {
 
     return availableMoves;
 }
-exports.removeOffBoardMoves = function (availableMoves) {
-    for (let i = 0; i <= availableMoves.length - 1; i++) {
-        if (availableMoves[i].row < 0 || availableMoves[i].row > 7) {
-            availableMoves.splice(i, 1);
-        }
-        if (availableMoves[i].col < 0 || availableMoves[i].col > 7) {
-            availableMoves.splice(i, 1);
-        }
-        return availableMoves;
-    }
+exports.removeOffBoardMoves = function (allAvailableMoves) {
+    let availableMoves = [];
+    let availableMovesFirstPass = [];
+
+    availableMovesFirstPass = allAvailableMoves.filter(square => (square.row >= 0 && square.col >= 0));
+    availableMoves = availableMovesFirstPass.filter(square => (square.row <= 7 && square.col <= 7));
+
+    return availableMoves;
 }
 exports.removeLateralBlockedMoves = function (allAvailableMoves, board, location) {
     // if a blocking piece is found remove all moves after it. If the blocking piece is friendly remove the square with the blocker on it too

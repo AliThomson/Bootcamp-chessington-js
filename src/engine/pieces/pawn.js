@@ -1,6 +1,7 @@
 import Piece from './piece';
 import Square from '../square';
 import Player from "../player";
+import {removeOffBoardMoves} from "./movesHelper";
 
 export default class Pawn extends Piece {
     constructor(player) {
@@ -8,20 +9,22 @@ export default class Pawn extends Piece {
     }
 
     getAvailableMoves(board) {
-        let availableMoves = [];
+        let allAvailableMoves = [];
         let location = board.findPiece(this);
         if (this.player === Player.WHITE) {
-            availableMoves.push(Square.at(location.row + 1, location.col))
+            allAvailableMoves.push(Square.at(location.row + 1, location.col))
             if(location.row === 1) {
-                availableMoves.push(Square.at(location.row + 2, location.col))
+                allAvailableMoves.push(Square.at(location.row + 2, location.col))
             }
         } else {
-            availableMoves.push(Square.at(location.row - 1, location.col))
+            allAvailableMoves.push(Square.at(location.row - 1, location.col))
             if(location.row === 6) {
-                availableMoves.push(Square.at(location.row - 2, location.col))
+                allAvailableMoves.push(Square.at(location.row - 2, location.col))
             }
         }
-        //for each square in availableMoves
+
+        let availableMoves = removeOffBoardMoves(allAvailableMoves);
+
         for (let i = 0; i <= availableMoves.length - 1; i++) {
             if (board.getPiece(availableMoves[i])) {
                 if (i === 0){
@@ -31,6 +34,7 @@ export default class Pawn extends Piece {
                 }
             }
         }
+
         return availableMoves;
     }
 }

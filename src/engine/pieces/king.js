@@ -8,7 +8,7 @@ export default class King extends Piece {
     }
 
     getAvailableMoves(board) {
-        let availableMoves = [];
+        let allAvailableMoves = [];
         let location = board.findPiece(this)
         let rowStartPoint = location.row-1;
         let colStartPoint = location.col-1;
@@ -17,11 +17,11 @@ export default class King extends Piece {
             for (let j=0; j<=2; j++) {
 
                 if (i!==1 || j!==1) {
-                   availableMoves.push(Square.at(rowStartPoint + i, colStartPoint + j));
+                    allAvailableMoves.push(Square.at(rowStartPoint + i, colStartPoint + j));
                 }
             }
         }
-        removeOffBoardMoves(availableMoves);
+        const availableMoves = removeOffBoardMoves(allAvailableMoves);
         return availableMoves;
     }
 }

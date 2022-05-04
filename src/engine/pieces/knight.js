@@ -8,7 +8,7 @@ export default class Knight extends Piece {
     }
 
     getAvailableMoves(board) {
-        let availableMoves = [];
+        let allAvailableMoves = [];
         let location = board.findPiece(this)
 
         //There are 4 rows of squares
@@ -18,31 +18,31 @@ export default class Knight extends Piece {
         let colStartPoint = location.col-1;
 
         //There are 2 column values for each row value
-        availableMoves.push(Square.at(rowStartPoint, colStartPoint));
-        availableMoves.push(Square.at(rowStartPoint, colStartPoint+2));
+        allAvailableMoves.push(Square.at(rowStartPoint, colStartPoint));
+        allAvailableMoves.push(Square.at(rowStartPoint, colStartPoint+2));
 
         //row #2 is 1 row behind the start and the column value is 2 to the left
         rowStartPoint = location.row-1;
         colStartPoint = location.col-2;
 
-        availableMoves.push(Square.at(rowStartPoint, colStartPoint));
-        availableMoves.push(Square.at(rowStartPoint, colStartPoint+4));
+        allAvailableMoves.push(Square.at(rowStartPoint, colStartPoint));
+        allAvailableMoves.push(Square.at(rowStartPoint, colStartPoint+4));
 
         //row #3 is 1 row ahead of the start and the column value is still 2 to the left
         rowStartPoint = location.row+1;
 
-        availableMoves.push(Square.at(rowStartPoint, colStartPoint));
-        availableMoves.push(Square.at(rowStartPoint, colStartPoint+4));
+        allAvailableMoves.push(Square.at(rowStartPoint, colStartPoint));
+        allAvailableMoves.push(Square.at(rowStartPoint, colStartPoint+4));
 
         //row #4 is 2 rows ahead of the start and the column value is now 1 to the left
         rowStartPoint = location.row+2;
         colStartPoint = location.col-1;
 
-        availableMoves.push(Square.at(rowStartPoint, colStartPoint));
-        availableMoves.push(Square.at(rowStartPoint, colStartPoint+2));
+        allAvailableMoves.push(Square.at(rowStartPoint, colStartPoint));
+        allAvailableMoves.push(Square.at(rowStartPoint, colStartPoint+2));
 
         // we need to remove any squares that fall outside the board (<0 or >7)
-        removeOffBoardMoves(availableMoves);
+        const availableMoves = removeOffBoardMoves(allAvailableMoves);
 
         return availableMoves;
     }
