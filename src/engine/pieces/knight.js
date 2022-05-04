@@ -44,6 +44,16 @@ export default class Knight extends Piece {
         // we need to remove any squares that fall outside the board (<0 or >7)
         const availableMoves = removeOffBoardMoves(allAvailableMoves);
 
+        //remove moves blocked my friendly pieces
+        for (let i = 0; i <= availableMoves.length - 1; i++) {
+            let blockingPiece = board.getPiece(availableMoves[i]);
+
+            if (blockingPiece) {
+                if (board.currentPlayer.description === blockingPiece.player.description) {
+                    availableMoves.splice(i, 1);
+                }
+            }
+        }
         return availableMoves;
     }
 }
