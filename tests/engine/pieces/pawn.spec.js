@@ -41,6 +41,18 @@ describe('Pawn', () => {
 
             moves.should.be.empty;
         });
+        it('can take opposing piece diagonally', () => {
+            const pawn = new Pawn(Player.WHITE);
+            const opposingPiece = new Pawn(Player.BLACK);
+
+            board.setPiece(Square.at(3, 3), pawn);
+            board.setPiece(Square.at(4, 4), opposingPiece);
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.deep.include.members([Square.at(4, 4), Square.at(4, 3)]);
+            moves.should.not.deep.include(Square.at(4, 2));
+        });
 
     });
 
