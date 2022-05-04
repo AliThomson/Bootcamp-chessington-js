@@ -10,21 +10,21 @@ export default class Pawn extends Piece {
 
     getAvailableMoves(board) {
         let allAvailableMoves = [];
-        let alDiagonalMoves = [];
+        let allDiagonalMoves = [];
         let location = board.findPiece(this);
         if (this.player === Player.WHITE) {
             allAvailableMoves.push(Square.at(location.row + 1, location.col))
             // add in diagonal moves here - add to available moves if opposing piece present
-            alDiagonalMoves.push(Square.at(location.row + 1, location.col +1))
-            alDiagonalMoves.push(Square.at(location.row + 1, location.col -1))
+            allDiagonalMoves.push(Square.at(location.row + 1, location.col + 1))
+            allDiagonalMoves.push(Square.at(location.row + 1, location.col - 1))
             if(location.row === 1) {
                 allAvailableMoves.push(Square.at(location.row + 2, location.col))
             }
         } else {
             allAvailableMoves.push(Square.at(location.row - 1, location.col))
             // add in diagonal moves here - add to available moves if opposing piece present
-            alDiagonalMoves.push(Square.at(location.row - 1, location.col +1))
-            alDiagonalMoves.push(Square.at(location.row - 1, location.col -1))
+            allDiagonalMoves.push(Square.at(location.row - 1, location.col + 1))
+            allDiagonalMoves.push(Square.at(location.row - 1, location.col - 1))
             if(location.row === 6) {
                 allAvailableMoves.push(Square.at(location.row - 2, location.col))
             }
@@ -42,7 +42,7 @@ export default class Pawn extends Piece {
             }
         }
 
-        let diagonalMoves = removeOffBoardMoves(alDiagonalMoves);
+        let diagonalMoves = removeOffBoardMoves(allDiagonalMoves);
 
         // add moves where opposing piece is diagonal to current player
         for (let i = 0; i <= diagonalMoves.length - 1; i++) {
