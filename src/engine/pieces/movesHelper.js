@@ -78,17 +78,17 @@ exports.removeLateralBlockedMoves = function (allAvailableMoves, board, location
             const blockLocation = Square.at(allAvailableMoves[i].row, allAvailableMoves[i].col);
             if (location.row > allAvailableMoves[i].row) {
                 //add all moves where row > the row of the blocker
-                availableMoves = allAvailableMoves.filter(square => square.row > blockLocation.row);
+                availableMoves = allAvailableMoves.filter(square => square.row >= blockLocation.row);
             } else {
                 // add all moves where row < blocker row
-                availableMoves = allAvailableMoves.filter(square => square.row < blockLocation.row);
+                availableMoves = allAvailableMoves.filter(square => square.row <= blockLocation.row);
             }
             if (location.col > allAvailableMoves[i].col) {
                 //add all moves where column > the column of the blocker
-                availableMoves = allAvailableMoves.filter(square => square.col > blockLocation.col);
+                availableMoves = allAvailableMoves.filter(square => square.col >= blockLocation.col);
             } else {
                 // add all moves where column < blocker column
-                availableMoves = allAvailableMoves.filter(square => square.col < blockLocation.col);
+                availableMoves = allAvailableMoves.filter(square => square.col <= blockLocation.col);
             }
             if (board.currentPlayer.description === blockingPiece.player.description) {
                 availableMoves.splice(i, 1);
