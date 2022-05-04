@@ -5,6 +5,7 @@ import Board from '../../../src/engine/board';
 import Player from '../../../src/engine/player';
 import Square from '../../../src/engine/square';
 import GameSettings from '../../../src/engine/gameSettings';
+import Bishop from "../../../src/engine/pieces/bishop";
 
 describe('Queen', () => {
 
@@ -23,7 +24,7 @@ describe('Queen', () => {
             // Vertical
             Square.at(0, 3), Square.at(1, 3), Square.at(3, 3), Square.at(4, 3), Square.at(5, 3), Square.at(6, 3), Square.at(7, 3)
         ];
-        
+
         moves.should.deep.include.members(expectedMoves);
     });
 
@@ -39,7 +40,7 @@ describe('Queen', () => {
             // Backwards diagonal
             Square.at(0, 5), Square.at(1, 4), Square.at(3, 2), Square.at(4, 1), Square.at(5, 0)
         ];
-        
+
         moves.should.deep.include.members(expectedMoves);
     });
 
@@ -72,5 +73,22 @@ describe('Queen', () => {
         const moves = queen.getAvailableMoves(board);
 
         moves.should.not.deep.include(Square.at(4, 7));
+    });
+    it('cannot take friendly pieces', () => {
+        const queen = new Queen(Player.WHITE);
+        const opposingPiece1 = new Pawn(Player.BLACK);
+        const opposingPiece2 = new Pawn(Player.BLACK);
+        const friendlyPiece1 = new Pawn(Player.WHITE);
+        const friendlyPiece2 = new Pawn(Player.WHITE);
+        board.setPiece(Square.at(4, 4), queen);
+        board.setPiece(Square.at(2, 2), opposingPiece1);
+        board.setPiece(Square.at(4, 2), opposingPiece2);
+        board.setPiece(Square.at(2, 6), friendlyPiece1);
+        board.setPiece(Square.at(4, 6), friendlyPiece2);
+
+        const moves = queen.getAvailableMoves(board);
+        const unexpectedMoves = [Square.at(2, 6), Square.at(4, 6)];
+
+        moves.should.not.deep.include.members(unexpectedMoves);
     });
 });
