@@ -1,5 +1,5 @@
 import Piece from './piece';
-import {addDiagonalMoves} from "./movesHelper";
+import {addDiagonalMoves, removeDiagonalBlockedMoves} from "./movesHelper";
 
 export default class Bishop extends Piece {
     constructor(player) {
@@ -8,7 +8,8 @@ export default class Bishop extends Piece {
 
     getAvailableMoves(board) {
         const location = board.findPiece(this);
-        const availableMoves = addDiagonalMoves(location);
+        const allAvailableMoves = addDiagonalMoves(location);
+        const availableMoves = removeDiagonalBlockedMoves(allAvailableMoves, board, location);
         return availableMoves;
     }
 }

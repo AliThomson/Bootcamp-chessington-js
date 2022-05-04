@@ -1,5 +1,4 @@
 import Square from "../square";
-import Player from "../player";
 
 exports.addLateralMoves = function (location) {
     let availableMoves = [];
@@ -37,9 +36,7 @@ exports.addDiagonalMoves = function (location) {
     //stop the col value going above 7
     endPoint = 7 - j;
     for (let i = 0; i <= endPoint; i++) {
-
         if (j !== colStartPoint && i !== rowStartPoint) {
-
             availableMoves.push(Square.at(i, j));
         }
         j++
@@ -48,17 +45,18 @@ exports.addDiagonalMoves = function (location) {
     //right to left
     //adding 1 to row, subtracting one from col until row hits 7 or col hits 0
     j = (rowStartPoint + colStartPoint)
-
+    if (j > 7) {
+        j=7;
+    }
     endPoint = j;
     for (let i = 0; i <= endPoint; i++) {
 
         if (i !== rowStartPoint && j !== colStartPoint) {
-
             availableMoves.push(Square.at(i, j));
         }
         j--
     }
-    //console.log(availableMoves)
+
     return availableMoves;
 }
 exports.removeOffBoardMoves = function (availableMoves) {
@@ -72,11 +70,11 @@ exports.removeOffBoardMoves = function (availableMoves) {
         return availableMoves;
     }
 }
-exports.removeBlockedMoves = function (allAvailableMoves, board, location) {
+exports.removeLateralBlockedMoves = function (allAvailableMoves, board, location) {
     // if a blocking piece is found remove all moves after it. If the blocking piece is friendly remove the square with the blocker on it too
     let availableMoves = [];
     for (let i = 0; i <= allAvailableMoves.length - 1; i++) {
-        let blockingPiece = board.getPiece(allAvailableMoves[i])
+        let blockingPiece = board.getPiece(allAvailableMoves[i]);
 
         if (blockingPiece) {
             const blockLocation = Square.at(allAvailableMoves[i].row, allAvailableMoves[i].col);
@@ -93,6 +91,43 @@ exports.removeBlockedMoves = function (allAvailableMoves, board, location) {
             } else {
                 // add all moves where column < blocker column
                 availableMoves = allAvailableMoves.filter(square => square.col < blockLocation.col);
+            }
+            if (board.currentPlayer.description === blockingPiece.player.description) {
+                availableMoves.splice(i, 1);
+            }
+        }
+    }
+    if (availableMoves.length === 0) {
+        availableMoves = allAvailableMoves;
+    }
+    return availableMoves
+}
+exports.removeDiagonalBlockedMoves = function (allAvailableMoves, board, playerLocation) {
+    // if a blocking piece is found remove all moves after it. If the blocking piece is friendly remove the square with the blocker on it too
+    let availableMoves = [];
+    for (let i = 0; i <= allAvailableMoves.length - 1; i++) {
+
+        let blockingPiece = board.getPiece(allAvailableMoves[i]);
+        if (blockingPiece) {
+            const blockLocation = Square.at(allAvailableMoves[i].row, allAvailableMoves[i].col);
+            // if row is higher
+            if (playerLocation.row > blockLocation.row) {
+                // if col is higher
+                if (playerLocation.col > blockLocation.col) {
+                    availableMoves = allAvailableMoves.filter(square => (square.row > blockLocation.row && square.col > blockLocation.col));
+                // if col is lower
+                } else {
+                    availableMoves = allAvailableMoves.filter(square => (square.row > blockLocation.row && square.col < blockLocation.col));
+                }
+            // if row is lower
+            } else {
+                // if col is higher
+                if (playerLocation.col > blockLocation.col) {
+                    availableMoves = allAvailableMoves.filter(square => (square.row < blockLocation.row && square.col > blockLocation.col));
+                // if col is lower
+                } else {
+                    availableMoves = allAvailableMoves.filter(square => (square.row < blockLocation.row && square.col < blockLocation.col));
+                }
             }
             if (board.currentPlayer.description === blockingPiece.player.description) {
                 availableMoves.splice(i, 1);
