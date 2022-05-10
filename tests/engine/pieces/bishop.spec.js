@@ -25,6 +25,21 @@ describe('Bishop', () => {
 
         moves.should.deep.include.members(expectedMoves);
     });
+    it('black bishop can move diagonally', () => {
+        const bishop = new Bishop(Player.BLACK);
+        board.setPiece(Square.at(7, 4), bishop);
+
+        const moves = bishop.getAvailableMoves(board);
+
+        const expectedMoves = [
+            // Forwards diagonal
+            Square.at(3,0), Square.at(4,1), Square.at(5,2), Square.at(6,3),
+            // Backwards diagonal
+            Square.at(4,7), Square.at(5,6), Square.at(6,5)
+        ];
+
+        moves.should.deep.include.members(expectedMoves);
+    });
 
     it('cannot make any other moves', () => {
         const bishop = new Bishop(Player.WHITE);

@@ -3,13 +3,13 @@ import Square from "../square";
 exports.addHorizontalMoves = function (location) {
     let availableMoves = [];
     let endPoint = 7;
-    let colStartPoint = location.col;
-    let rowStartPoint = location.row;
+    let colCurrentPlayer = location.col;
+    let rowCurrentPlayer = location.row;
 
     for (let i=0; i<=endPoint; i++) {
 
-        if (i !== colStartPoint) {
-            availableMoves.push(Square.at(rowStartPoint, i));
+        if (i !== colCurrentPlayer) {
+            availableMoves.push(Square.at(rowCurrentPlayer, i));
         }
     }
     return availableMoves;
@@ -18,13 +18,13 @@ exports.addHorizontalMoves = function (location) {
 exports.addVerticalMoves = function (location) {
     let availableMoves = [];
     let endPoint = 7;
-    let colStartPoint = location.col;
-    let rowStartPoint = location.row;
+    let colCurrentPlayer = location.col;
+    let rowCurrentPlayer = location.row;
 
     for (let j=0; j<=endPoint; j++) {
 
-        if (j !== rowStartPoint) {
-            availableMoves.push(Square.at(j, colStartPoint));
+        if (j !== rowCurrentPlayer) {
+            availableMoves.push(Square.at(j, colCurrentPlayer));
         }
     }
     return availableMoves;
@@ -32,35 +32,49 @@ exports.addVerticalMoves = function (location) {
 exports.addDiagonalMoves = function (location) {
     let availableMoves = [];
     let endPoint = 7;
-    let colStartPoint = location.col;
-    let rowStartPoint = location.row;
+    let colCurrentPlayer = location.col;
+    let rowCurrentPlayer = location.row;
 
     //left to right
     //Add one to both row and col until one of them hits 7
-    let j = colStartPoint - rowStartPoint;
+    let colStartPoint = colCurrentPlayer - rowCurrentPlayer;
+    if (colStartPoint < 0) {
+        colStartPoint = 0
+    }
+    let rowStartPoint = rowCurrentPlayer - colCurrentPlayer;
+    if (rowStartPoint < 0) {
+        rowStartPoint = 0
+    }
 
     //stop the col value going above 7
-    endPoint = 7 - j;
-    for (let i = 0; i <= endPoint; i++) {
-        if (j !== colStartPoint && i !== rowStartPoint) {
-            availableMoves.push(Square.at(i, j));
+    endPoint = 7 - colStartPoint;
+    for (let i = rowStartPoint; i <= endPoint; i++) {
+        if (colStartPoint !== colCurrentPlayer && i !== rowCurrentPlayer) {
+            availableMoves.push(Square.at(i, colStartPoint));
         }
-        j++
+        colStartPoint++
     }
 
     //right to left
     //adding 1 to row, subtracting one from col until row hits 7 or col hits 0
-    j = (rowStartPoint + colStartPoint)
-    if (j > 7) {
-        j=7;
+    const sumOfColRow = rowCurrentPlayer + colCurrentPlayer
+    if (sumOfColRow <= 7) {
+        rowStartPoint = 0;
+    } else {
+        rowStartPoint = (rowCurrentPlayer + colCurrentPlayer) - 7;
     }
-    endPoint = j;
-    for (let i = 0; i <= endPoint; i++) {
 
-        if (i !== rowStartPoint && j !== colStartPoint) {
-            availableMoves.push(Square.at(i, j));
+    colStartPoint = rowCurrentPlayer + colCurrentPlayer
+    if (colStartPoint > 7) {
+        colStartPoint=7;
+    }
+    endPoint = 7;
+    for (let i = rowStartPoint; i <= endPoint; i++) {
+
+        if (i !== rowCurrentPlayer && colStartPoint !== colCurrentPlayer) {
+            availableMoves.push(Square.at(i, colStartPoint));
         }
-        j--
+        colStartPoint--
     }
 
     return availableMoves;
