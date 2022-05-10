@@ -27,6 +27,27 @@ describe('Queen', () => {
 
         moves.should.deep.include.members(expectedMoves);
     });
+    it('can move laterally off start row', () => {
+        const queen = new Queen(Player.WHITE);
+        const friendlyPiece1 = new Pawn(Player.WHITE);
+        const friendlyPiece2 = new Pawn(Player.WHITE);
+        const friendlyPiece3 = new Pawn(Player.WHITE);
+        board.setPiece(Square.at(0, 3), queen);
+        board.setPiece(Square.at(1, 2), friendlyPiece1);
+        board.setPiece(Square.at(1, 4), friendlyPiece2);
+        board.setPiece(Square.at(3, 3), friendlyPiece3);
+
+        const moves = queen.getAvailableMoves(board);
+
+        const expectedMoves = [
+            // Horizontal
+            Square.at(0, 0), Square.at(0, 1), Square.at(0, 2), Square.at(0, 4), Square.at(0, 5), Square.at(0, 6), Square.at(0, 7),
+            // Vertical
+            Square.at(1, 3), Square.at(2, 3)
+        ];
+
+        moves.should.deep.include.members(expectedMoves);
+    });
 
     it('can move diagonally', () => {
         const queen = new Queen(Player.WHITE);

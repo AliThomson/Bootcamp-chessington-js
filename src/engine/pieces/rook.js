@@ -1,5 +1,10 @@
 import Piece from './piece';
-import {addLateralMoves, removeLateralBlockedMoves} from "./movesHelper";
+import {
+    addVerticalMoves,
+    removeVerticalBlockedMoves,
+    addHorizontalMoves,
+    removeHorizontalBlockedMoves, addDiagonalMoves, removeDiagonalBlockedMoves
+} from "./movesHelper";
 
 export default class Rook extends Piece {
     constructor(player) {
@@ -8,8 +13,12 @@ export default class Rook extends Piece {
 
     getAvailableMoves(board) {
         const location = board.findPiece(this);
-        let allAvailableMoves = addLateralMoves(location);
-        let availableMoves = removeLateralBlockedMoves(allAvailableMoves, board, location);
+        let allVerticalMoves = addVerticalMoves(location);
+        let verticalMoves = removeVerticalBlockedMoves(allVerticalMoves, board, location);
+        let allHorizontalMoves = addHorizontalMoves(location);
+        let availableMoves = removeHorizontalBlockedMoves(allHorizontalMoves, board, location);
+
+        availableMoves.push(...verticalMoves);
 
         return availableMoves;
     }

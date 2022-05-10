@@ -1,20 +1,26 @@
 import Square from "../square";
-
-exports.addLateralMoves = function (location) {
+// Split this into add vertical and add horizontal
+exports.addHorizontalMoves = function (location) {
     let availableMoves = [];
     let endPoint = 7;
     let colStartPoint = location.col;
     let rowStartPoint = location.row;
 
-    //HORIZONTAL
     for (let i=0; i<=endPoint; i++) {
 
         if (i !== colStartPoint) {
             availableMoves.push(Square.at(rowStartPoint, i));
         }
     }
+    return availableMoves;
+}
 
-    //VERTICAL
+exports.addVerticalMoves = function (location) {
+    let availableMoves = [];
+    let endPoint = 7;
+    let colStartPoint = location.col;
+    let rowStartPoint = location.row;
+
     for (let j=0; j<=endPoint; j++) {
 
         if (j !== rowStartPoint) {
@@ -68,37 +74,62 @@ exports.removeOffBoardMoves = function (allAvailableMoves) {
 
     return availableMoves;
 }
-exports.removeLateralBlockedMoves = function (allAvailableMoves, board, location) {
+exports.removeVerticalBlockedMoves = function (allVerticalMoves, board, playerLocation) {
     // if a blocking piece is found remove all moves after it. If the blocking piece is friendly remove the square with the blocker on it too
-    let availableMoves = [];
-    for (let i = 0; i <= allAvailableMoves.length - 1; i++) {
-        let blockingPiece = board.getPiece(allAvailableMoves[i]);
+    let verticalMoves = [];
+    for (let i = 0; i <= allVerticalMoves.length - 1; i++) {
+        let blockingPiece = board.getPiece(allVerticalMoves[i]);
 
         if (blockingPiece) {
-            const blockLocation = Square.at(allAvailableMoves[i].row, allAvailableMoves[i].col);
-            if (location.row > allAvailableMoves[i].row) {
+            const blockLocation = Square.at(allVerticalMoves[i].row, allVerticalMoves[i].col);
+            if (playerLocation.row > blockLocation.row) {
                 //add all moves where row > the row of the blocker
-                availableMoves = allAvailableMoves.filter(square => square.row >= blockLocation.row);
+                verticalMoves = allVerticalMoves.filter(square => (square.row >= blockLocation.row && square.col === blockLocation.col));
             } else {
                 // add all moves where row < blocker row
-                availableMoves = allAvailableMoves.filter(square => square.row <= blockLocation.row);
-            }
-            if (location.col > allAvailableMoves[i].col) {
-                //add all moves where column > the column of the blocker
-                availableMoves = allAvailableMoves.filter(square => square.col >= blockLocation.col);
-            } else {
-                // add all moves where column < blocker column
-                availableMoves = allAvailableMoves.filter(square => square.col <= blockLocation.col);
+                verticalMoves = allVerticalMoves.filter(square => (square.row <= blockLocation.row && square.col === blockLocation.col));
             }
             if (board.currentPlayer.description === blockingPiece.player.description) {
-                availableMoves.splice(i, 1);
+                verticalMoves.splice(i, 1);
             }
         }
     }
-    if (availableMoves.length === 0) {
-        availableMoves = allAvailableMoves;
+    if (verticalMoves.length === 0) {
+        verticalMoves = allVerticalMoves;
     }
-    return availableMoves
+    return verticalMoves;
+}
+exports.removeHorizontalBlockedMoves = function (allHorizontalMoves, board, playerLocation) {
+    // if a blocking piece is found remove all moves after it. If the blocking piece is friendly remove the square with the blocker on it too
+    let horizontalMoves = [];
+    for (let i = 0; i <= allHorizontalMoves.length - 1; i++) {
+        let blockingPiece = board.getPiece(allHorizontalMoves[i]);
+
+        if (blockingPiece) {
+            const blockLocation = Square.at(allHorizontalMoves[i].row, allHorizontalMoves[i].col);
+            if (playerLocation.row > blockLocation.row) {
+                //add all moves where row > the row of the blocker
+                horizontalMoves = allHorizontalMoves.filter(square => (square.row >= blockLocation.row && square.col === blockLocation.col));
+            } else {
+                // add all moves where row < blocker row
+                horizontalMoves = allHorizontalMoves.filter(square => (square.row <= blockLocation.row && square.col === blockLocation.col));
+            }
+            if (playerLocation.col > blockLocation.col) {
+                //add all moves where column > the column of the blocker
+                horizontalMoves = allHorizontalMoves.filter(square => (square.col >= blockLocation.col && square.row === blockLocation.row));
+            } else {
+                // add all moves where column < blocker column
+                horizontalMoves = allHorizontalMoves.filter(square => (square.col <= blockLocation.col && square.row === blockLocation.row));
+            }
+            if (board.currentPlayer.description === blockingPiece.player.description) {
+                horizontalMoves.splice(i, 1);
+            }
+        }
+    }
+    if (horizontalMoves.length === 0) {
+        horizontalMoves = allHorizontalMoves;
+    }
+    return horizontalMoves
 }
 exports.removeDiagonalBlockedMoves = function (allAvailableMoves, board, playerLocation) {
     // if a blocking piece is found remove all moves after it. If the blocking piece is friendly remove the square with the blocker on it too

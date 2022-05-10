@@ -1,5 +1,12 @@
 import Piece from './piece';
-import {addDiagonalMoves, addLateralMoves, removeDiagonalBlockedMoves, removeLateralBlockedMoves} from "./movesHelper";
+import {
+    addVerticalMoves,
+    removeVerticalBlockedMoves,
+    addHorizontalMoves,
+    removeHorizontalBlockedMoves,
+    addDiagonalMoves,
+    removeDiagonalBlockedMoves
+   } from "./movesHelper";
 
 export default class Queen extends Piece {
     constructor(player) {
@@ -8,12 +15,15 @@ export default class Queen extends Piece {
 
     getAvailableMoves(board) {
         const location = board.findPiece(this);
-        let allAvailableMoves = addLateralMoves(location);
-        let diagonalMoves = addDiagonalMoves(location);
-        allAvailableMoves.push(...diagonalMoves);
-        let availableMovesFirstPass = removeLateralBlockedMoves(allAvailableMoves, board, location);
-        let availableMoves = removeDiagonalBlockedMoves(availableMovesFirstPass, board, location);
-        return availableMoves;
+        let allVerticalMoves = addVerticalMoves(location);
+        let verticalMoves = removeVerticalBlockedMoves(allVerticalMoves, board, location);
+        let allHorizontalMoves = addHorizontalMoves(location);
+        let horizontalMoves = removeHorizontalBlockedMoves(allHorizontalMoves, board, location);
+        let allDiagonalMoves = addDiagonalMoves(location);
+        let availableMoves = removeDiagonalBlockedMoves(allDiagonalMoves, board, location);
+        availableMoves.push(...verticalMoves);
+        availableMoves.push(...horizontalMoves);
 
+        return availableMoves;
     }
 }
